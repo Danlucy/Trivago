@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:trivago/features/auth/repository/auth_repository.dart';
 import 'package:trivago/routes/app_router.gr.dart';
 
 class GeneralDrawer extends ConsumerWidget {
@@ -45,6 +46,13 @@ class GeneralDrawer extends ConsumerWidget {
             leading: const Icon(Icons.group),
             onTap: () {
               navigateToGroupBookingOverview(context);
+            },
+          ),
+          ListTile(
+            title: const Text('Log out'),
+            leading: const Icon(Icons.logout),
+            onTap: () {
+              ref.read(authRepositoryProvider).logout();
             },
           ),
           // ListTile(

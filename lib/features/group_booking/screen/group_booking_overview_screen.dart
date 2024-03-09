@@ -25,6 +25,9 @@ class _GroupBookingOverviewScreenState
   final List<String> selectedRoomList = [];
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
+
     return Theme(
       data: Pallete.lightModeAppTheme,
       child: Scaffold(
@@ -40,7 +43,7 @@ class _GroupBookingOverviewScreenState
             }),
             actions: const [],
           ),
-          drawer: const GeneralDrawer(),
+          drawer: GeneralDrawer(width: height, height: width),
           body: ref.watch(groupBookingsProvider).when(
                 data: (data) {
                   return data.isEmpty
@@ -94,98 +97,103 @@ class _GroupBookingOverviewScreenState
                                           ),
                                         ),
                                       ),
-                                      SizedBox(
-                                        width: width,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            Container(
-                                              padding: const EdgeInsets.all(2),
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      const BorderRadius.all(
-                                                          Radius.circular(5)),
-                                                  border: Border.all(
-                                                    color: Pallete.greyColor,
-                                                  )),
-                                              child: Text(
-                                                bookingData.districtID.name,
-                                                style: const TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
+                                      Flexible(
+                                        child: SizedBox(
+                                          width: width,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: [
+                                              Container(
+                                                padding:
+                                                    const EdgeInsets.all(2),
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        const BorderRadius.all(
+                                                            Radius.circular(5)),
+                                                    border: Border.all(
+                                                      color: Pallete.greyColor,
+                                                    )),
+                                                child: Text(
+                                                  bookingData.districtID.name,
+                                                  style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
                                               ),
-                                            ),
-                                            const SizedBox(
-                                              width: 5,
-                                            ),
-                                            SizedBox(
-                                              width: 18,
-                                              child: Text(
-                                                bookingData.roomBooked
-                                                    .toString(),
+                                              const SizedBox(
+                                                width: 5,
                                               ),
-                                            ),
-                                            const Icon(
-                                              Icons.house,
-                                              size: 20,
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 10),
-                                              child: Column(
-                                                children: [
-                                                  Container(
-                                                    padding:
-                                                        const EdgeInsets.all(1),
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.grey
-                                                          .withOpacity(0.1),
-                                                      borderRadius:
-                                                          const BorderRadius
-                                                              .all(
-                                                        Radius.circular(10),
+                                              SizedBox(
+                                                width: 18,
+                                                child: Text(
+                                                  bookingData.roomBooked
+                                                      .toString(),
+                                                ),
+                                              ),
+                                              const Icon(
+                                                Icons.house,
+                                                size: 20,
+                                              ),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 10),
+                                                child: Column(
+                                                  children: [
+                                                    Container(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              1),
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.grey
+                                                            .withOpacity(0.1),
+                                                        borderRadius:
+                                                            const BorderRadius
+                                                                .all(
+                                                          Radius.circular(10),
+                                                        ),
+                                                      ),
+                                                      child: Text(
+                                                        DateFormat.yMMMd()
+                                                            .format(bookingData
+                                                                .vacantDuration
+                                                                .start),
+                                                        style: const TextStyle(
+                                                            fontSize: 12),
                                                       ),
                                                     ),
-                                                    child: Text(
-                                                      DateFormat.yMMMd().format(
-                                                          bookingData
-                                                              .vacantDuration
-                                                              .start),
-                                                      style: const TextStyle(
-                                                          fontSize: 12),
-                                                    ),
-                                                  ),
-                                                  const Icon(
-                                                      Icons
-                                                          .arrow_downward_outlined,
-                                                      size: 10),
-                                                  Container(
-                                                    padding:
-                                                        const EdgeInsets.all(1),
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.grey
-                                                          .withOpacity(0.1),
-                                                      borderRadius:
-                                                          const BorderRadius
-                                                              .all(
-                                                        Radius.circular(10),
+                                                    const Icon(
+                                                        Icons
+                                                            .arrow_downward_outlined,
+                                                        size: 10),
+                                                    Container(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              1),
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.grey
+                                                            .withOpacity(0.1),
+                                                        borderRadius:
+                                                            const BorderRadius
+                                                                .all(
+                                                          Radius.circular(10),
+                                                        ),
+                                                      ),
+                                                      child: Text(
+                                                        DateFormat.yMMMd()
+                                                            .format(bookingData
+                                                                .vacantDuration
+                                                                .end),
+                                                        style: const TextStyle(
+                                                            fontSize: 12),
                                                       ),
                                                     ),
-                                                    child: Text(
-                                                      DateFormat.yMMMd().format(
-                                                          bookingData
-                                                              .vacantDuration
-                                                              .end),
-                                                      style: const TextStyle(
-                                                          fontSize: 12),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            )
-                                          ],
+                                                  ],
+                                                ),
+                                              )
+                                            ],
+                                          ),
                                         ),
                                       )
                                     ],

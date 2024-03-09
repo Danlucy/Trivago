@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:trivago/converter/date_time_range_converter.dart';
 import 'package:trivago/features/booking/repository/booking_repository.dart';
@@ -25,10 +24,9 @@ class BookingController extends _$BookingController {
       hasBreakfast: false,
       districtID: DistrictsID.A);
 
-  clearState() {
-    print('DOG');
+  clearState(WidgetRef ref) {
     state = HomeState(
-        selectedDate: DateTime.now(),
+        selectedDate: ref.watch(bookingControllerProvider).selectedDate,
         roomBooked: 1,
         unknownBool1: false,
         unknownBool2: false,
@@ -80,7 +78,7 @@ class BookingController extends _$BookingController {
       return element.isBooked(selectedDate) && element.districtID == district;
     });
 
-    final bookedSum = bookings.where((element) {
+    final booked = bookings.where((element) {
       return element.isBooked(selectedDate) && element.districtID == district;
     });
 
@@ -90,22 +88,26 @@ class BookingController extends _$BookingController {
       int total = element.roomBooked;
       groupBookedSum += total;
     }
-    return (roomUnbooked - bookedSum.length - groupBookedSum);
+    return (roomUnbooked - booked.length - groupBookedSum);
   }
 
-  List<DateTime> blackOutDates(WidgetRef ref, DistrictsID id, String roomName) {
+  List<DateTime> blackOutDates(
+      WidgetRef ref, DistrictsID id, List<String> roomNameList) {
     ref.watch(bookingControllerProvider);
-    final bookings = ref.watch(bookingsProvider).valueOrNull ?? <BookingData>[];
-    final roomBooked = bookings.where((element) {
-      return element.districtID == id && element.roomName == roomName;
-    });
     List<DateTime> dateBooked = [];
-    for (var element in roomBooked) {
-      dateBooked.addAll(getDaysInBetweenIncludingStartEndDate(
-          startDateTime: element.vacantDuration.start,
-          endDateTime: element.vacantDuration.end));
-    }
+    for (String rooms in roomNameList) {
+      final bookings =
+          ref.watch(bookingsProvider).valueOrNull ?? <BookingData>[];
+      final roomBooked = bookings.where((element) {
+        return element.districtID == id && element.roomName == rooms;
+      });
 
+      for (var element in roomBooked) {
+        dateBooked.addAll(getDaysInBetweenIncludingStartEndDate(
+            startDateTime: element.vacantDuration.start,
+            endDateTime: element.vacantDuration.end));
+      }
+    }
     return dateBooked;
   }
 
@@ -154,7 +156,7 @@ class BookingController extends _$BookingController {
       for (DateTime date = home.timeRange!.start;
           date.isBeforeOrEqualTo(home.timeRange!.end);
           date = date.add(
-        Duration(days: 1),
+        const Duration(days: 1),
       ),) {
         if (specialDates1.contains(date)) {
           specialDaysCount1++;

@@ -22,10 +22,13 @@ class AnalyticsScreen extends ConsumerStatefulWidget {
 class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
+
     return Theme(
       data: Pallete.lightModeAppTheme,
       child: Scaffold(
-        drawer: const GeneralDrawer(),
+        drawer: GeneralDrawer(height: height, width: width),
         appBar: AppBar(
           title: const Text('Analytics'),
           centerTitle: false,
@@ -37,7 +40,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
             );
           }),
         ),
-        body: const DefaultTabController(
+        body: DefaultTabController(
           initialIndex: 1,
           length: 3,
           child: Column(

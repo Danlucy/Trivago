@@ -1,4 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:io';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,17 +10,40 @@ import 'constants/colour.dart';
 import 'core/error_text.dart';
 import 'core/loader.dart';
 import 'firebase_options.dart';
-import 'models/user_models/user_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  Future<bool> hasNetwork() async {
+    try {
+      final result = await InternetAddress.lookup('example.com');
+      return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
+    } on SocketException catch (_) {
+      return false;
+    }
+  }
+
+  bool isOnline = await hasNetwork();
   runApp(
-    const ProviderScope(
-      child: MyApp(),
-    ),
+    isOnline
+        ? const ProviderScope(
+            child: MyApp(),
+          )
+        : const MaterialApp(
+            home: Scaffold(
+              body: Center(
+                child: Text(
+                  'No Internet',
+                  style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+          ),
   );
 }
 

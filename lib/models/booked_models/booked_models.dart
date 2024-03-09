@@ -71,10 +71,10 @@ class GroupBookingData with _$GroupBookingData {
       time.isBetween(vacantDuration.start, vacantDuration.end);
   bool doDateTimeRangesOverlap(DateTime selectedStart, DateTime selectedEnd,
       DateTime roomStart, DateTime roomEnd) {
-    return (selectedStart.isBefore(roomEnd) ||
-            selectedStart.isAtSameMomentAs(roomEnd)) &&
-        (selectedEnd.isAfter(roomStart) ||
-            selectedEnd.isAtSameMomentAs(roomStart));
+    return (selectedStart.dateOnly.isBefore(roomEnd.dateOnly) ||
+            selectedStart.isAtSameMomentAs(roomEnd.dateOnly)) &&
+        (selectedEnd.dateOnly.isAfter(roomStart.dateOnly) ||
+            selectedEnd.dateOnly.isAtSameMomentAs(roomStart.dateOnly));
   }
 
   List<DateTime> getDaysInBetweenIncludingStartEndDate(

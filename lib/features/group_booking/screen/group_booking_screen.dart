@@ -1,9 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-import 'package:trivago/core/failure.dart';
 import 'package:trivago/core/snack_bar.dart';
 import 'package:trivago/features/booking/controller/booking_controller.dart';
 import 'package:trivago/features/group_booking/controller/group_booking_controller.dart';
@@ -49,7 +46,8 @@ class _TourGroupButtonState extends ConsumerState<GroupBookingScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 5),
       child: ElevatedButton.icon(
           onPressed: () {
-            ref.read(bookingControllerProvider.notifier).clearState();
+            ref.read(bookingControllerProvider.notifier).clearState(ref);
+
             ref
                 .read(bookingControllerProvider.notifier)
                 .setDistrictID(DistrictsID.A);
@@ -76,7 +74,7 @@ class _TourGroupButtonState extends ConsumerState<GroupBookingScreen> {
                                 Column(
                                   children: [
                                     SfDateRangePicker(
-                                      enablePastDates: false,
+                                      // enablePastDates: false,
                                       headerStyle:
                                           const DateRangePickerHeaderStyle(
                                               textAlign: TextAlign.start),
@@ -135,6 +133,7 @@ class _TourGroupButtonState extends ConsumerState<GroupBookingScreen> {
                                           if (raw.isEmpty) {
                                             return 'Field cannot be empty';
                                           }
+                                          return null;
                                         },
                                         onChanged: ref
                                             .read(bookingControllerProvider
@@ -235,7 +234,7 @@ class _TourGroupButtonState extends ConsumerState<GroupBookingScreen> {
                                         if (value.isEmpty) {
                                           return 'Field cannot be empty';
                                         } else {
-                                          final data = int.tryParse(value!);
+                                          final data = int.tryParse(value);
 
                                           if (data == null) {
                                             return 'Must contain only Numbers!';

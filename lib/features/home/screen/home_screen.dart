@@ -3,14 +3,14 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivago/constants/colour.dart';
-import 'package:trivago/features/auth/controller/auth_controller.dart';
 import 'package:intl/intl.dart';
 import 'package:trivago/features/booking/controller/booking_controller.dart';
+import 'package:trivago/features/home/widget/district_area.dart';
 import 'package:trivago/features/home/widget/drawer.dart';
 import 'package:trivago/features/home/widget/home_tab_bar.dart';
 import 'package:trivago/features/home/widget/select_date_button.dart';
 import 'package:trivago/features/group_booking/screen/group_booking_screen.dart';
-import 'package:trivago/features/home/widget/dsitrict_area.dart';
+import 'package:trivago/models/room_models/room_model_data.dart';
 
 @RoutePage()
 class HomeScreen extends ConsumerStatefulWidget {
@@ -35,6 +35,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(
     BuildContext context,
   ) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
+
     ref.watch(bookingControllerProvider);
     return MaterialApp(
       theme: Pallete.lightModeAppTheme,
@@ -54,7 +57,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           //   // IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
           // ],
         ),
-        drawer: const GeneralDrawer(),
+        drawer: GeneralDrawer(height: height, width: width),
         body: HomeScreenScaffold(
           onDateDecrease: () {
             setState(() {
@@ -96,20 +99,36 @@ class HomeScreenScaffold extends ConsumerStatefulWidget {
 
   final void Function() onDateIncrease;
   final void Function() onDateDecrease;
+
   final void Function(DateTime) time;
+
   @override
   ConsumerState createState() => _HomeScreenScaffoldState();
 }
 
-class _HomeScreenScaffoldState extends ConsumerState<HomeScreenScaffold> {
+class _HomeScreenScaffoldState extends ConsumerState<HomeScreenScaffold>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(
+      vsync: this,
+      length: roomData.length,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final Function() onPressedCallback;
     ref.watch(bookingControllerProvider);
     return DefaultTabController(
       length: 7,
       child: Column(
         children: [
-          const DistrictView(),
+          DistrictView(
+            controller: _tabController,
+          ),
           const Divider(
             height: 0,
           ),
@@ -117,7 +136,7 @@ class _HomeScreenScaffoldState extends ConsumerState<HomeScreenScaffold> {
           const Divider(
             height: 0,
           ),
-          const HomeTabBar(),
+          HomeTabBar(controller: _tabController),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -125,6 +144,7 @@ class _HomeScreenScaffoldState extends ConsumerState<HomeScreenScaffold> {
                 onPressed: () {
                   ref.watch(bookingControllerProvider);
                   widget.onDateDecrease();
+                  selectedRoomList.clear();
                 },
                 icon: const Icon(Icons.keyboard_arrow_left_rounded),
                 iconSize: 40,
@@ -137,6 +157,7 @@ class _HomeScreenScaffoldState extends ConsumerState<HomeScreenScaffold> {
                 onPressed: () {
                   ref.watch(bookingControllerProvider);
                   widget.onDateIncrease();
+                  selectedRoomList.clear();
                 },
                 icon: const Icon(Icons.keyboard_arrow_right),
                 iconSize: 40,

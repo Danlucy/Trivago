@@ -4,8 +4,8 @@ import 'package:trivago/features/booking/controller/booking_controller.dart';
 import 'package:trivago/models/room_models/room_model_data.dart';
 
 class HomeTabBar extends ConsumerStatefulWidget {
-  const HomeTabBar({super.key});
-
+  const HomeTabBar({super.key, required this.controller});
+  final TabController controller;
   @override
   ConsumerState createState() => _TabBarAreaState();
 }
@@ -13,15 +13,18 @@ class HomeTabBar extends ConsumerStatefulWidget {
 class _TabBarAreaState extends ConsumerState<HomeTabBar> {
   @override
   Widget build(BuildContext context) {
-    return const TabBar(tabs: [
-      TabBars(DistrictsID.A),
-      TabBars(DistrictsID.B),
-      TabBars(DistrictsID.C),
-      TabBars(DistrictsID.D),
-      TabBars(DistrictsID.E),
-      TabBars(DistrictsID.F),
-      TabBars(DistrictsID.G),
-    ]);
+    return TabBar(
+      controller: widget.controller,
+      tabs: const [
+        TabBars(DistrictsID.A),
+        TabBars(DistrictsID.B),
+        TabBars(DistrictsID.C),
+        TabBars(DistrictsID.D),
+        TabBars(DistrictsID.E),
+        TabBars(DistrictsID.F),
+        TabBars(DistrictsID.G),
+      ],
+    );
   }
 }
 

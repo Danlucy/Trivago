@@ -96,7 +96,7 @@ class __ShowDialogState extends ConsumerState<DetailsDialog> {
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                      color: Color(0xFF6750a4).withOpacity(0.5),
+                      color: const Color(0xFF6750a4).withOpacity(0.5),
                       borderRadius: const BorderRadius.all(
                         Radius.circular(6),
                       ),
@@ -104,10 +104,8 @@ class __ShowDialogState extends ConsumerState<DetailsDialog> {
                     margin: const EdgeInsets.symmetric(horizontal: 2),
                     padding: const EdgeInsets.all(2),
                     child: Center(
-                        child: Expanded(
-                      child: Text(
-                        widget.bookingData.roomName,
-                      ),
+                        child: Text(
+                      widget.bookingData.roomName,
                     )),
                   ),
                   const Padding(
@@ -267,73 +265,68 @@ class DetailsButton extends StatelessWidget {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
 
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 5),
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(foregroundColor: colour),
-          onPressed: () {
-            showDialog(
-                context: context,
-                builder: (context) {
-                  return Center(
-                    child: Container(
-                      width: width * 3 / 4,
-                      height: 200,
-                      decoration: BoxDecoration(
-                          color: Pallete.peachColor,
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(16))),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            confirmTitle,
-                            style: const TextStyle(
-                                fontWeight: FontWeight.w500, fontSize: 16),
-                          ),
-                          const SizedBox(
-                            height: 50,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.redAccent),
-                                  child: const Text(
-                                    'Cancel',
-                                    style: TextStyle(color: Colors.black),
-                                  )),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              ElevatedButton(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 5),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(foregroundColor: colour),
+        onPressed: () {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return Center(
+                  child: Container(
+                    width: width * 3 / 4,
+                    height: height * 1 / 4,
+                    decoration: BoxDecoration(
+                        color: Pallete.peachColor,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(16))),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          confirmTitle,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w500, fontSize: 16),
+                        ),
+                        const SizedBox(
+                          height: 50,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ElevatedButton(
                                 onPressed: () {
-                                  function();
-
-                                  // AutoRouter.of(context)
-                                  //     .push(GroupBookingOverviewRoute());
+                                  Navigator.pop(context);
                                 },
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.redAccent),
                                 child: const Text(
-                                  'Confirm',
+                                  'Cancel',
                                   style: TextStyle(color: Colors.black),
-                                ),
-                              )
-                            ],
-                          )
-                        ],
-                      ),
+                                )),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                function();
+                              },
+                              child: const Text(
+                                'Confirm',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                            )
+                          ],
+                        )
+                      ],
                     ),
-                  );
-                });
-          },
-          child: Text(
-            button,
-          ),
+                  ),
+                );
+              });
+        },
+        child: Text(
+          button,
         ),
       ),
     );

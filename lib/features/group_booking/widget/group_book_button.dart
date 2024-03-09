@@ -48,11 +48,13 @@ class _GroupBookButtonState extends ConsumerState<GroupBookButton> {
 
           if (!valid) return;
 
-          if (ref.read(bookingControllerProvider).roomBooked! <=
-              availableRoom) {
-            bookRoom(ref.read(bookingControllerProvider), ref);
-            Navigator.pop(context);
-          }
+          // if (ref.read(bookingControllerProvider).roomBooked! <=
+          //     availableRoom) {
+          //   bookRoom(ref.read(bookingControllerProvider), ref);
+          //   Navigator.pop(context);
+          // }
+          bookRoom(ref.read(bookingControllerProvider), ref);
+          Navigator.pop(context);
         },
         child: const Text('Book'));
   }

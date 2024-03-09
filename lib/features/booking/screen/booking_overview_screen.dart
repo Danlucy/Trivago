@@ -1,11 +1,7 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:trivago/constants/colour.dart';
-import 'package:trivago/constants/firebase_constants.dart';
 import 'package:trivago/core/error_text.dart';
 import 'package:trivago/core/loader.dart';
 import 'package:trivago/features/booking/repository/booking_repository.dart';
@@ -30,6 +26,9 @@ class _BookingOverviewScreenState extends ConsumerState<BookingOverviewScreen> {
   final List<String> selectedRoomList = [];
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
+
     return Theme(
         data: Pallete.lightModeAppTheme,
         child: Scaffold(
@@ -63,7 +62,7 @@ class _BookingOverviewScreenState extends ConsumerState<BookingOverviewScreen> {
                     ),
                   )),
             ),
-            drawer: const GeneralDrawer(),
+            drawer: GeneralDrawer(height: height, width: width),
             body: ref.watch(relevantBookingsProvider).when(
                   data: (data) {
                     final filteredData = data.where(
@@ -128,117 +127,120 @@ class _BookingOverviewScreenState extends ConsumerState<BookingOverviewScreen> {
                                             ),
                                           ),
                                         ),
-                                        SizedBox(
-                                          width: width,
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.end,
-                                            children: [
-                                              Container(
-                                                decoration: const BoxDecoration(
-                                                  color: Color(0xFFf7f2f9),
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                    Radius.circular(6),
+                                        Flexible(
+                                          child: SizedBox(
+                                            width: width,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                Container(
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                    color: Color(0xFFf7f2f9),
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                      Radius.circular(6),
+                                                    ),
+                                                  ),
+                                                  width: 40,
+                                                  margin: const EdgeInsets
+                                                      .symmetric(horizontal: 5),
+                                                  padding:
+                                                      const EdgeInsets.all(2),
+                                                  child: Text(
+                                                      bookingData.roomName,
+                                                      textAlign:
+                                                          TextAlign.center),
+                                                ),
+                                                Container(
+                                                  padding:
+                                                      const EdgeInsets.all(2),
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                              .all(
+                                                        Radius.circular(5),
+                                                      ),
+                                                      border: Border.all(
+                                                        color:
+                                                            Pallete.greyColor,
+                                                      )),
+                                                  child: Text(
+                                                    bookingData.districtID.name,
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold),
                                                   ),
                                                 ),
-                                                width: 40,
-                                                margin:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 5),
-                                                padding:
-                                                    const EdgeInsets.all(2),
-                                                child: Text(
-                                                    bookingData.roomName,
-                                                    textAlign:
-                                                        TextAlign.center),
-                                              ),
-                                              Container(
-                                                padding:
-                                                    const EdgeInsets.all(2),
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        const BorderRadius.all(
-                                                            Radius.circular(5)),
-                                                    border: Border.all(
-                                                      color: Pallete.greyColor,
-                                                    )),
-                                                child: Text(
-                                                  bookingData.districtID.name,
-                                                  style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold),
+                                                const SizedBox(
+                                                  width: 5,
                                                 ),
-                                              ),
-                                              const SizedBox(
-                                                width: 5,
-                                              ),
-                                              const Icon(
-                                                Icons.house,
-                                                size: 20,
-                                              ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 10),
-                                                child: Column(
-                                                  children: [
-                                                    Container(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              1),
-                                                      decoration: BoxDecoration(
-                                                        color: Colors.grey
-                                                            .withOpacity(0.1),
-                                                        borderRadius:
-                                                            const BorderRadius
-                                                                .all(
-                                                          Radius.circular(10),
+                                                Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 10),
+                                                  child: Column(
+                                                    children: [
+                                                      Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(1),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: Colors.grey
+                                                              .withOpacity(0.1),
+                                                          borderRadius:
+                                                              const BorderRadius
+                                                                  .all(
+                                                            Radius.circular(10),
+                                                          ),
+                                                        ),
+                                                        child: Text(
+                                                          DateFormat.yMMMd()
+                                                              .format(bookingData
+                                                                  .vacantDuration
+                                                                  .start),
+                                                          style: TextStyle(
+                                                              color: Pallete
+                                                                  .purpleColor,
+                                                              fontSize: 12),
                                                         ),
                                                       ),
-                                                      child: Text(
-                                                        DateFormat.yMMMd()
-                                                            .format(bookingData
-                                                                .vacantDuration
-                                                                .start),
-                                                        style: TextStyle(
-                                                            color: Pallete
-                                                                .purpleColor,
-                                                            fontSize: 12),
-                                                      ),
-                                                    ),
-                                                    const Icon(
-                                                        Icons
-                                                            .arrow_downward_outlined,
-                                                        size: 10),
-                                                    Container(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              1),
-                                                      decoration: BoxDecoration(
-                                                        color: Colors.grey
-                                                            .withOpacity(0.1),
-                                                        borderRadius:
-                                                            const BorderRadius
-                                                                .all(
-                                                          Radius.circular(10),
+                                                      const Icon(
+                                                          Icons
+                                                              .arrow_downward_outlined,
+                                                          size: 10),
+                                                      Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(1),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: Colors.grey
+                                                              .withOpacity(0.1),
+                                                          borderRadius:
+                                                              const BorderRadius
+                                                                  .all(
+                                                            Radius.circular(10),
+                                                          ),
+                                                        ),
+                                                        child: Text(
+                                                          DateFormat.yMMMd()
+                                                              .format(bookingData
+                                                                  .vacantDuration
+                                                                  .end),
+                                                          style: TextStyle(
+                                                              color: Pallete
+                                                                  .purpleColor,
+                                                              fontSize: 12),
                                                         ),
                                                       ),
-                                                      child: Text(
-                                                        DateFormat.yMMMd()
-                                                            .format(bookingData
-                                                                .vacantDuration
-                                                                .end),
-                                                        style: TextStyle(
-                                                            color: Pallete
-                                                                .purpleColor,
-                                                            fontSize: 12),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              )
-                                            ],
+                                                    ],
+                                                  ),
+                                                )
+                                              ],
+                                            ),
                                           ),
                                         )
                                       ],

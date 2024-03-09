@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -74,6 +73,7 @@ Stream<List<BookingData>> relevantBookings(BookingsRef ref) {
       .orderBy(
         'vacantDuration.start',
       )
+      .orderBy('customerName')
       .snapshots()
       .map(
         (value) => value.docs
@@ -83,7 +83,7 @@ Stream<List<BookingData>> relevantBookings(BookingsRef ref) {
             .where(
           (element) {
             return element.vacantDuration.end
-                .isAfter(DateTime.now().subtract(Duration(days: 30)));
+                .isAfter(DateTime.now().subtract(const Duration(days: 30)));
           },
         ).toList(),
       );

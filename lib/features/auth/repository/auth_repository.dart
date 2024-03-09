@@ -27,7 +27,8 @@ class AuthRepository {
       : _firestore = firestore,
         _auth = auth,
         _googleSignIn = googleSignIn;
-  CollectionReference get _users => _firestore.collection(FirebaseConstants.usersCollection);
+  CollectionReference get _users =>
+      _firestore.collection(FirebaseConstants.usersCollection);
   Stream<User?> get authStateChange => _auth.authStateChanges();
 
   Future<void> logout() => _auth.signOut();
@@ -41,7 +42,8 @@ class AuthRepository {
       final credential = GoogleAuthProvider.credential(
           accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
 
-      UserCredential userCredential = await _auth.signInWithCredential(credential);
+      UserCredential userCredential =
+          await _auth.signInWithCredential(credential);
 
       UserModel userModel;
 
@@ -58,11 +60,9 @@ class AuthRepository {
       }
 
       return right(userModel);
-    } on FirebaseException catch (e, stacktrace) {
-      print(e);
+    } on FirebaseException catch (e) {
       throw e.message!;
     } catch (e) {
-      print(e);
       return left(
         Failure(
           e.toString(),
